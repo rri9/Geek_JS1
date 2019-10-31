@@ -8,14 +8,23 @@ const films = [
 const origins = {
     "Титаник": "Российская Федерация",
     "Смешарики": "США",
-    "Рапунцель": "",
-    "Один дома": ""
+    "Рапунцель": "Республика Беларусь",
+    "Один дома": "СшА"
 };
 
-for (let n in origins) {
-    console.log(n + " " + origin.n);
-}
-
+//Добавляем св-во contry в films через for, перебирая films
 // for (let film of films) {
-//     film.country = origins[film].name;
+//     film.country = origins[film.name];
 // }
+
+//Добавляем св-во contry в films через for, перебирая origins
+// for (let n in origins) {
+//     for (let film of films) {
+//         if (n === film.name) {
+//             film.country = origins[n];
+//         }
+//     }
+// }
+
+//Добавляем св-во contry в films через map
+films.map(film => film["country"]=origins[film["name"]]);

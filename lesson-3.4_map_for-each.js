@@ -26,5 +26,8 @@ const origins = {
 //     }
 // }
 
+let money = 0;
 //Добавляем св-во contry в films через map
-films.map(film => film["country"]=origins[film["name"]]);
+films.map(film => film["country"] = origins[film["name"]]);
+//Считаем сумму полей money через forEach
+films.forEach(film => money += film["money"]);

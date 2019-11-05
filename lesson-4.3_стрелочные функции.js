@@ -14,7 +14,7 @@ const origins = {
 
 let money = 0;
 
-//Добавляем св-во contry в films через map
+//Добавляем св-во country в films через map
 films.map(film => (film["country"] = origins[film["name"]]));
 //Считаем сумму полей money через forEach
 films.forEach(film => (money += film["money"]));
@@ -27,7 +27,7 @@ films.forEach(film => (money += film["money"]));
 const foo = function(x) {
     console.log(x);
 };
-//Стрелочная йункция (лямбда выражение):
+//Стрелочная функция (лямбда выражение):
 // const foo_arrow = (x) => { console.log(x); };
 const foo_arrow = x => console.log(x); //То же самое, но короче,т.к. один аргумент
 
@@ -36,12 +36,13 @@ const foo_arrow = x => console.log(x); //То же самое, но короче
 /*------------------------------------------*/
 const li = ["qwe", "lkj", "abc"];
 // li.sort(); // Сортировка по первому (и оследующим) символам
- /*li.sort(function (x, y) {
-    console.log(x[1] + " <> " +y[1] + " " + (x[1] > y[1]) );
-    
-    return x[1] - y[1];
-    }
-); // Сортировка по 2му символу*/
-li.sort( (x, y) => y[1]>x[1] );
+// Сортировка по 2му символу:
+//li.sort((x, y) => y[1] > x[1]); 
+/* Так (как написано выше) не работает.
+Надо прописывать возврат 3х значений:
+ 1 - если первое число в паре больше
+-1 - если второе больше
+ 0 - если равны */
+li.sort((x, y) => { if (x > y) return 1; else return -1; });
 
 console.log(li);

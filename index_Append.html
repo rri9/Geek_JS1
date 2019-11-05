@@ -18,7 +18,6 @@
             }
         form {
             width: 300px;
-            margin: 0px auto;
             }
         fieldset {
             margin-bottom: 10px;
@@ -28,45 +27,32 @@
             }
         input[type="text"] {
             width: 200px;
-            margin-right: 15px;
             }
         input[type="submit"] {
             margin: 0 calc(300px/2 - 30px);
         }
-        .answer {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-        .answer h3 {
-            width: 100%;
-            text-align: center;
-        }
         .answerItem {
-            margin: 10px;
+            margin: 5px;
             width: 300px;
             line-height: 1.3em;
-        }
-        label {
-            font-size: 10px;
         }
     </style>
 </head>
 
 <body>
     <div class="container" id="container">
-        <h2>Поиск авиабилетов</h2>
+        <h2>Поиск авиабилетов test</h2>
         <form name="TicketSearch" onSubmit="return searchTicket()">
             <fieldset>
                 <legend>Детали маршрута</legend>
-                <label id="originCity"><input type="text" name="originCity" placeholder="Откуда" required value="Москва" id="originCityInput"/></label><br>
-                <label id="destinationCity"><input type="text" name="destinationCity" placeholder="Куда"
-                    required value="Ницца" id="destinationCityInput"/></label><br>
-                <input type="date" name="departDateByUser" placeholder="Туда" required value="2019-12-01"/><br>
+                <label><input type="text" name="originCity" placeholder="Откуда" required /></label><br>
+                <label><input type="text" name="destinationCity" placeholder="Куда"
+                    required /></label><br>
+                <input type="date" name="departDateByUser" placeholder="Туда" required /><br>
             </fieldset>
             <input type="submit" name="send" value="Поиск">
         </form>
-        <script src="lesson-5.js"></script>
+        <script src="lesson-5_Append.js"></script>
     </div>
 </body>
 

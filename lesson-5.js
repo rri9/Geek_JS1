@@ -86,7 +86,7 @@ function searchTicket(e) {
     }
     //Обработка ответа
     let prices = [];
-    let variantsCount = 5;
+    let variantsCount = 6;
     for (let i of responsePrices["best_prices"]) {
         let n = 0;
         if (
@@ -98,17 +98,15 @@ function searchTicket(e) {
             n++;
         }
     }
-    /*for (let i = 0; i < variantsCount; i++) {
-            if (responsePrices["best_prices"][i]["actual"] === true) {
-                prices[i] = responsePrices["best_prices"][i];
-            } else i--;
-        }*/
 
     // Формирование вывода на страницу:
+    //Точная дата
     if (prices[0] !== undefined) {
-        answer.innerHTML += `<h3>Первые ${variantsCount} вариантов:</h3>`;
+        answer.innerHTML += `<h3>Варианты на запрошенную дату:</h3>`;
 
-        for (let i = 0; i < variantsCount; i++) {
+        // for (let i = 0; i < variantsCount; i++) {
+        for (let i in prices) {
+            if (i >= variantsCount) break;
             answer.innerHTML += `<div class="answerItem">Дата вылета: ${
                 prices[i]["depart_date"]
             }<br>
@@ -117,6 +115,42 @@ function searchTicket(e) {
     `;
         }
     } else answer.innerHTML += "Нет билетов по заданным параметрам";
+    //Дата около запрошенной
+    answer.innerHTML += `<h3>Варианты на другие даты:</h3>`;
+    let counter = 0;
+    for (let i of responsePrices["best_prices"]) {
+        if (counter >= variantsCount) break;
+        answer.innerHTML += `<div class="answerItem">Дата вылета: ${
+            i["depart_date"]
+        }<br>
+    Количество пересадок: ${i["number_of_changes"]}<br>
+    Стоимость билета: ${i["value"]} руб.</div>
+    `;
+        counter++;
+    }
+    //Минимальная цена
+    answer.innerHTML += `<h3>Минимальная цена:</h3>`;
+    let minPrices = [];
+    let minPrice = Infinity;
+    for (let i of responsePrices["best_prices"]) {
+        if (i.value > minPrice) continue;
+        minPrice = i.value;
+    }
+    counter = 0;
+    for (let i of responsePrices["best_prices"]) {
+        if (i.value === minPrice && counter < variantsCount) {
+            minPrices.push(i);
+            counter++;
+        }
+    }
+    for (let i of minPrices) {
+        answer.innerHTML += `<div class="answerItem">Дата вылета: ${
+            i["depart_date"]
+        }<br>
+    Количество пересадок: ${i["number_of_changes"]}<br>
+    Стоимость билета: ${i["value"]} руб.</div>
+    `;
+    }
     prevAnswer = document.getElementById("answer");
     if (prevAnswer) prevAnswer.remove();
     whereToAppend.append(answer);

@@ -10,16 +10,6 @@ class Bird {
   }
 }
 
-// const bird1 = new Bird("bird1");
-// const bird2 = new Bird("bird2");
-// const bird3 = new Bird("bird3");
-// const bird4 = new Bird("bird4");
-// const bird5 = new Bird("bird5");
-// const bird6 = new Bird("bird6");
-// const bird7 = new Bird("bird7");
-// const bird8 = new Bird("bird8");
-// const bird9 = new Bird("bird9");
-// const bird10 = new Bird("bird10");
 const birdsAmount = 10;
 const birds = [];
 
@@ -45,8 +35,25 @@ while (getAliveBirdsAmount() > 1) {
 }
 console.log("");
 
-console.log(`Now there are ${getAliveBirdsAmount()} alive bird!`);
+if (getAliveBirdsAmount() === 1) {
+  console.log(`There is only one alive bird left!`);
+  console.log(`It is bird${getRandomAliveBirdIndex()}. Congratulations!`);
+  
+}
+console.log("\nChecking score...");
+let scoreTable = [];
+for (let i = 0; i < birdsAmount; i++) {
+  scoreTable[i] = { name: birds[i].name, score: birds[i].points};
+}
+scoreTable.sort(scoreTableCompare);
 
+console.log("Best headhunters are:");
+for (let n in scoreTable) {
+  console.log(`${+n+1}. ${scoreTable[n].name} eated ${scoreTable[n].score} birds`);
+}
+console.log("\nParty is over! =)");
+
+//Функции
 function getAliveBirdsAmount() {
   let aliveBirdsAmount = 0;
   for (let n of birds) {
@@ -63,3 +70,13 @@ function getRandomAliveBirdIndex() {
   } while (birds[rand].wasEaten !== false);
   return rand;
 }
+
+//TODO Почему не работает с тернарным оператором?
+function scoreTableCompare(a, b) {
+  (a.score < b.score) ? 1 : -1;
+  // if (a.score < b.score) {
+  //   return 1;
+  // } else {
+  //   return -1;
+  // }
+};

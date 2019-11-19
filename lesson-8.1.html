@@ -1,0 +1,52 @@
+<!--
+  DOM - Document Object Model
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
+    <title>lesson-8.1</title>
+    <style>
+      .class {
+        font-size: 50px;
+      }
+      .added {
+        color: red;
+        background-color: #ddd;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="class" id="iden">
+      hello!
+    </div>
+  </body>
+  <script>
+    // const el = document.getElementById("iden");
+    // console.log(el);
+    // const elCl = document.getElementsByClassName("class");
+    // console.log(elCl[0]);
+    const elQ = document.querySelector("div.class#iden");
+    // console.log(elQ);
+    // setTimeout("console.log('1')", 2000);  //не работает
+    // elQ.innerText = "I'm here!";
+    elQ.innerHTML = "I'm <b>here</b>";
+    // elQ.style.color = "red";
+    // elQ.style.backgroundColor = "#ddd";
+    // elQ.style.padding = "10px";
+    //вместо перечисления всех свойств, добавляем элементу класс
+    elQ.classList.add("added");
+    const body = document.querySelector("body");
+
+    body.innerHTML += "<h3 class='added'>add</h3>"; //Добавить элемент - плохо
+
+    const newEl = document.createElement("div");  //Добавить элемент - хорошо
+    newEl.innerText = "I'm here 2";
+    newEl.classList.add("added");
+    body.appendChild(newEl);
+  </script>
+</html>

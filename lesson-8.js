@@ -99,27 +99,88 @@ function showCategories() {
     cat.innerText = category;
     cat.classList.add("category");
     parentNode.appendChild(cat);
+    cat.addEventListener("click", showFilmsOfCategory);
   });
 
-  const cat = document.querySelectorAll(".category");
-  // console.log(cat);
-  for (let n = 0; n < cat.length; n++) {
-    cat[n].addEventListener("click", showFilmsOfCategory);
-  }
+  const f = document.createElement("div");
+  f.id = "chooseCat";
+  f.innerText = "Выберите категорию...";
+  f.style.padding = "10px";
+  document.querySelector(".films").appendChild(f);
 }
-
+//Показать фильмы определенной категории
 function showFilmsOfCategory(event) {
-  // console.log("showFilmsOfCategory called");
-  // console.log(event.currentTarget.innerText);
   const parentNode = document.querySelector(".films");
-  
+  deleteOldFilms(parentNode, "film");
   films.forEach(film => {
     if (categories[film.category] == event.currentTarget.innerText) {
       const f = document.createElement("div");
       f.innerText = film.name;
       f.classList.add("film");
-      //TODO Delete prev child nodes of other category
       parentNode.appendChild(f);
+      f.addEventListener("click", showFilmDetails);
     }
   });
+}
+function deleteOldFilms(parentNode, className) {
+  const chooseCat = document.querySelector("#chooseCat");
+  if (chooseCat) {
+    chooseCat.parentNode.removeChild(chooseCat);
+  }
+  const oldNodes = document.querySelectorAll("." + className);
+  if (oldNodes.length == 0) {
+    return;
+  }
+  for (let n = 0; n < oldNodes.length; n++) {
+    parentNode.removeChild(oldNodes[n]);
+  }
+}
+//Показать отзыв на фильм
+function showFilmDetails(event) {
+  const parentNode = document.querySelector(".details");
+  parentNode.innerHTML = "";
+  parentNode.style.visibility = "visible";
+  const newEl = document.createElement("div");
+  newEl.classList = "filmDetails";
+  let film = new Film;
+  for (let f of films) {
+    if (f.name == event.currentTarget.innerText) {
+      film = f;
+    }
+  }
+  newEl.innerHTML = `<h3>${film.name}</h3>`;
+  newEl.innerHTML += `<p>Категория: ${film.category}</p>`;
+  newEl.innerHTML += `<p>Бюджет: ${film.budget}</p>`;
+  newEl.innerHTML += `<p>Оценка экспертов: ${film.expertStars}</p>`;
+  
+  const newButton = document.createElement("button");
+  newButton.id = "showComments";
+  newButton.innerText = "Показать отзывы";
+  newButton.addEventListener("click", showComments);
+
+  parentNode.appendChild(newEl);
+  parentNode.appendChild(newButton);
+}
+//Показать комментарии
+function showComments(event) {
+  const oldComments = document.querySelector(".comments");
+  if (oldComments) {
+    oldComments.parentNode.removeChild(oldComments);
+  }
+  const newEl = document.createElement("div");
+  newEl.classList = "comments";
+  event.currentTarget.parentNode.appendChild(newEl);
+
+  for (let film of films) {
+    if (film.name == event.currentTarget.previousSibling.firstElementChild.innerText) {
+      for (c of film.comments) {
+        const newComment = document.createElement("div");
+        newComment.classList = "comment";
+        newComment.innerHTML = `<p>${c.text}</p>`;
+        newComment.innerHTML += `<div class="stars">Оценка: ${c.stars}</div>`;
+        newComment.innerHTML += `<div class="author">${c.author}</div>`;
+        newEl.appendChild(newComment);
+      }
+    }
+  }
 }

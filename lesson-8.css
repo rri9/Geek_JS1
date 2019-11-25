@@ -75,6 +75,7 @@ h3 {
   background-color: #eee;
 }
 .details {
+  overflow: auto;
 }
 .filmDetails p {
   margin: 5px;
@@ -86,6 +87,12 @@ h3 {
 }
 .comments {
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.noComments {
+  text-align: center;
 }
 .comment {
   padding: 10px;
@@ -103,4 +110,11 @@ h3 {
 }
 .author {
   justify-self: end;
+}
+form {
+  width: 90%;
+  margin: 5px auto;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
 }

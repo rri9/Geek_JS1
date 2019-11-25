@@ -135,31 +135,38 @@ function deleteOldFilms(parentNode, className) {
     parentNode.removeChild(oldNodes[n]);
   }
 }
-//Показать отзыв на фильм
+//Показать детали фильма
 function showFilmDetails(event) {
   const parentNode = document.querySelector(".details");
   parentNode.innerHTML = "";
   parentNode.style.visibility = "visible";
   const newEl = document.createElement("div");
   newEl.classList = "filmDetails";
-  let film = new Film;
+  let film = new Film();
   for (let f of films) {
     if (f.name == event.currentTarget.innerText) {
       film = f;
     }
   }
   newEl.innerHTML = `<h3>${film.name}</h3>`;
-  newEl.innerHTML += `<p>Категория: ${film.category}</p>`;
+  newEl.innerHTML += `<p>Категория: ${categories[film.category]}</p>`;
   newEl.innerHTML += `<p>Бюджет: ${film.budget}</p>`;
   newEl.innerHTML += `<p>Оценка экспертов: ${film.expertStars}</p>`;
-  
-  const newButton = document.createElement("button");
-  newButton.id = "showComments";
-  newButton.innerText = "Показать отзывы";
-  newButton.addEventListener("click", showComments);
+
+  const newBtnAddComment = document.createElement("button");
+  newBtnAddComment.id = "addComment";
+  newBtnAddComment.innerText = "Добавить отзыв";
+  newBtnAddComment.addEventListener("click", addCommentForm);
+
+  const newBtnShowComments = document.createElement("button");
+  newBtnShowComments.id = "showComments";
+  newBtnShowComments.innerText = "Показать отзывы";
+  newBtnShowComments.addEventListener("click", showComments);
 
   parentNode.appendChild(newEl);
-  parentNode.appendChild(newButton);
+  parentNode.appendChild(newBtnShowComments);
+  parentNode.appendChild(newBtnAddComment);
+  showComments();
 }
 //Показать комментарии
 function showComments(event) {
@@ -167,12 +174,17 @@ function showComments(event) {
   if (oldComments) {
     oldComments.parentNode.removeChild(oldComments);
   }
+
+  const detailsNode = document.querySelector(".details");
+  const filmName = document.querySelector(".filmDetails").firstElementChild
+    .innerText;
+
   const newEl = document.createElement("div");
   newEl.classList = "comments";
-  event.currentTarget.parentNode.appendChild(newEl);
+  detailsNode.appendChild(newEl);
 
   for (let film of films) {
-    if (film.name == event.currentTarget.previousSibling.firstElementChild.innerText) {
+    if (film.name == filmName) {
       for (c of film.comments) {
         const newComment = document.createElement("div");
         newComment.classList = "comment";
@@ -182,5 +194,73 @@ function showComments(event) {
         newEl.appendChild(newComment);
       }
     }
+  }
+
+  let comments = document.querySelector(".comments");
+  if (comments && comments.innerHTML == "") {
+    comments.innerHTML = '<div class="noComments">Комментариев пока нет. Оставьте свой!</div>';
+  } else {
+    const newBtn = document.createElement("button");
+    newBtn.id = "hideComments";
+    newBtn.innerText = "Спрятать отзывы";
+    newBtn.addEventListener("click", hideComments);
+    comments.appendChild(newBtn);
+  }
+}
+//Отрисовка формы добавления комментария
+function addCommentForm() {
+  const oldComments = document.querySelector(".comments");
+  if (oldComments) {
+    oldComments.parentNode.removeChild(oldComments);
+  }
+  let str = `
+  Ваш комментарий:<br>
+    <textarea name="text" rows="3" cols="10"></textarea>
+    <label> Ваше имя:
+      <input type="text" size="30" name="author">
+    </label>
+    <label>Оценка фильма:
+      <input type="text" size="1" name="stars">
+    </label>
+    <button id="addCommentFormBtn">OK</button>
+  `;
+  let newForm = document.createElement("form");
+  document.querySelector(".details").appendChild(newForm);
+  newForm = document.querySelector("form");
+  newForm.innerHTML = str;
+
+  let btn = document.querySelector("#addCommentFormBtn");
+  btn.addEventListener("click", addCommentFormSubmit);
+}
+//Добавить комментарий (обработка данных от пользователя для отправки в метод фильма)
+function addCommentFormSubmit(event) {
+  event.preventDefault();
+
+  let filmName = document.querySelector(".filmDetails").firstElementChild
+    .innerText;
+  let film = getFilmByName(filmName);
+
+  let text = document.querySelector("textarea[name=text]").value;
+  let author = document.querySelector("input[name=author]").value;
+  let stars = document.querySelector("input[name=stars]").value;
+
+  film.addComment(text, author, stars);
+
+  let form = document.querySelector("form");
+  form.parentNode.removeChild(form);
+
+  showComments();
+}
+function getFilmByName(name) {
+  for (film of films) {
+    if (film.name == name) {
+      return film;
+    }
+  }
+}
+function hideComments() {
+  let comments = document.querySelector(".comments");
+  if (comments) {
+    comments.parentNode.removeChild(comments);
   }
 }
